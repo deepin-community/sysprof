@@ -1,0 +1,618 @@
+sysprof (3.40.1-3) UNRELEASED; urgency=medium
+
+  * update
+
+ -- Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>  Mon, 06 Jun 2022 19:59:58 +0800
+
+sysprof (3.40.1-3) unstable; urgency=medium
+
+  * debian/tests/control: Depend on libjson-glib-dev
+
+ -- Jeremy Bicha <jbicha@debian.org>  Sun, 29 Aug 2021 16:21:28 -0400
+
+sysprof (3.40.1-2) unstable; urgency=medium
+
+  * Release to unstable
+
+ -- Jeremy Bicha <jbicha@debian.org>  Tue, 24 Aug 2021 19:14:59 -0400
+
+sysprof (3.40.1-1) experimental; urgency=medium
+
+  * New upstream release
+  * debian/control:
+    - Bump dependency on glib 2.67.4, following upstream
+    - Build-depend on libjson-glib-dev (required by libsysprof)
+  * debian/sysprof.symbols: Update symbols, removing private ones.
+    Some symbols were wrongly exported till version 3.40.1, causing
+    customers of this library to export them.
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Wed, 26 May 2021 17:19:16 +0200
+
+sysprof (3.38.1-1) unstable; urgency=medium
+
+  * New upstream release
+  * Drop pkgconfig patches applied in new release
+  * Build-Depend on dh-sequence-gnome instead of gnome-pkg-tools
+  * Bump debhelper-compat to 13
+
+ -- Jeremy Bicha <jbicha@debian.org>  Sun, 18 Oct 2020 07:25:13 -0400
+
+sysprof (3.38.0-2) unstable; urgency=medium
+
+  * Team upload
+  * d/tests: Be consistent about what we call libsysprof-capture-4-dev.
+    It isn't a separate package yet, so this has no practical effect.
+  * d/control, d/tests/control: Add more -dev dependencies.
+    As with the other -dev dependencies, these are currently only Suggests,
+    because the development headers aren't split off into separate
+    packages yet; so the test needs to explicitly depend on them too.
+  * Add patches to generate proper pkg-config dependencies.
+    This fixes the autopkgtest.
+  * Belatedly update symbols file for 3.38.0
+  * d/upstream/metadata: Add
+
+ -- Simon McVittie <smcv@debian.org>  Wed, 16 Sep 2020 10:29:15 +0100
+
+sysprof (3.38.0-1) unstable; urgency=medium
+
+  * New upstream release:
+    - Build system fixes
+    - Fix incorrect warnings
+    - Add various missing capture APIs for GTK
+    - Be more careful about when polkit is queried
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Mon, 14 Sep 2020 12:40:19 +0200
+
+sysprof (3.37.90-1) experimental; urgency=medium
+
+  * Team upload
+  * d/watch: Watch for development versions
+  * d/gbp.conf: Adjust upstream tag format
+  * New upstream release
+  * d/control: Update dependency versions
+  * d/copyright: Rewrite in machine-readable format and update
+  * d/rules: Update flags to enable various components
+  * Refresh patch series
+    - d/p/tests-use-G_GSIZE_FORMAT-instead-of-G_GUINT64_FORMAT-for-.patch:
+      Remove, applied upstream
+  * d/tests: Add superficial tests for development libraries.
+    These are currently in the sysprof binary package.
+  * Add Suggests on packages required for compilation.
+    If we had -dev packages, then a Depends would be appropriate, but we
+    currently don't.
+  * d/control: Generate dependencies as though the libraries had been split.
+    The shared libraries (which are used by gnome-builder) are not
+    currently in separate binary packages, but if we generate dependencies
+    as though they are, it'll make the transition from libsysprof-3 to
+    libsysprof-4 go more gracefully.
+  * Add Provides as though -dev packages had been split out
+    libsysprof-capture is static-only; the others are shared.
+  * Add Breaks on gnome-builder (<< 3.37.90)
+    That's the first version to use the libsysprof-4 ABI. Ideally the shared
+    libraries would be packaged like shared libraries, but that will require
+    a trip through NEW, and until that can happen, let's not have a
+    known-broken combination.
+
+ -- Simon McVittie <smcv@debian.org>  Sat, 05 Sep 2020 16:07:26 +0100
+
+sysprof (3.36.0-2) unstable; urgency=medium
+
+  * d/p/tests-use-G_GSIZE_FORMAT-instead-of-G_GUINT64_FORMAT-for-.patch:
+    Fix FTBFS on 32-bit architectures
+
+ -- Laurent Bigonville <bigon@debian.org>  Thu, 19 Mar 2020 16:52:18 +0100
+
+sysprof (3.36.0-1) unstable; urgency=medium
+
+  * New upstream release
+    - Drop d/p/test-Fix-detection-of-pagesize-at-runtime.patch and
+      d/p/Fix-endianness-detection-when-writing-a-frame.patch, applied upstream
+    - debian/sysprof.docs: Remove the TODO file, gone upstream
+  * debian/control.in: Add libunwind-dev to the Build-deps where available
+  * debian/control.in: Bump Standards-Version to 4.5.0 (no further changes)
+  * debian/control.in: Make the package Rules-Requires-Root: no
+
+ -- Laurent Bigonville <bigon@debian.org>  Thu, 19 Mar 2020 10:37:38 +0100
+
+sysprof (3.34.1-2) unstable; urgency=medium
+
+  * debian/patches: Fix FTBFS on multiple architectures (Closes: #840097)
+
+ -- Laurent Bigonville <bigon@debian.org>  Thu, 02 Jan 2020 12:49:35 +0100
+
+sysprof (3.34.1-1) unstable; urgency=medium
+
+  * New upstream release
+    - Bump the build-dependencies
+  * debian/control.in: Bump Standards-Version to 4.4.1 (no further changes)
+  * debian/patches/disable_test_dbus_system.patch: Disable a test that
+    requires a system bus
+
+ -- Laurent Bigonville <bigon@debian.org>  Thu, 02 Jan 2020 00:32:16 +0100
+
+sysprof (3.32.0-2) unstable; urgency=medium
+
+  * Upload to unstable
+
+ -- Jeremy Bicha <jbicha@debian.org>  Sun, 15 Sep 2019 07:46:33 -0400
+
+sysprof (3.32.0-1) experimental; urgency=medium
+
+  * New upstream release
+
+ -- Jeremy Bicha <jbicha@debian.org>  Wed, 13 Mar 2019 18:52:16 -0400
+
+sysprof (3.31.90-1) experimental; urgency=medium
+
+  * New upstream release
+  * Bump minimum meson to 0.47.2
+  * Build-Depend on policykit-1 for polkit.its
+
+ -- Jeremy Bicha <jbicha@debian.org>  Thu, 07 Feb 2019 16:27:53 -0500
+
+sysprof (3.30.2-2) unstable; urgency=medium
+
+  * Add -Wl,-O1 to our LDFLAGS
+  * Bump Standards-Version to 4.3.0
+  * Build-Depend on debhelper-compat 12 and drop debian/compat
+
+ -- Jeremy Bicha <jbicha@debian.org>  Thu, 27 Dec 2018 14:50:05 -0500
+
+sysprof (3.30.2-1) unstable; urgency=medium
+
+  * New upstream release
+  * Build with -Wl,-z,defs to catch undefined references
+  * Drop debian/NEWS: obsolete since at least stretch
+
+ -- Jeremy Bicha <jbicha@debian.org>  Sat, 17 Nov 2018 12:23:09 -0500
+
+sysprof (3.30.1-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Jeremy Bicha <jbicha@debian.org>  Tue, 25 Sep 2018 09:23:46 -0400
+
+sysprof (3.30.0-1) unstable; urgency=medium
+
+  * New upstream release
+  * debian/sysprof.docs: Install DESIGN.md. README is now README.md
+  * Add X-Ubuntu-Use-Langpack to opt in to Ubuntu language pack handling
+    (LP: #1779574)
+  * Revert "Temporarily ignore test failures"
+  * Bump Standards-Version to 4.2.1
+  * Drop all patches: applied in new release
+  * Release to unstable
+
+ -- Jeremy Bicha <jbicha@debian.org>  Wed, 05 Sep 2018 07:34:12 -0400
+
+sysprof (3.29.3-1) experimental; urgency=medium
+
+  [ Jeremy Bicha ]
+  * New upstream development release
+  * Cherry-pick perf-fix-incorrect-free-func-for-ptr-array.patch
+  * Temporarily ignore test failures
+
+  [ Simon McVittie ]
+  * Replace build-dependency on libpolkit-backend-1-dev with
+    the smaller libpolkit-gobject-1-dev. sysprof is only a polkit client,
+    not a polkit backend, and libpolkit-backend-1-dev was removed in
+    version 0.109.
+
+ -- Jeremy Bicha <jbicha@debian.org>  Wed, 22 Aug 2018 09:23:04 -0400
+
+sysprof (3.28.1-1) unstable; urgency=medium
+
+  * New upstream release
+  * Bump Standards-Version to 4.1.4
+
+ -- Jeremy Bicha <jbicha@debian.org>  Tue, 10 Apr 2018 13:09:54 -0400
+
+sysprof (3.28.0-1) unstable; urgency=medium
+
+  * New upstream release
+  * Release to unstable
+  * Drop patch: Applied in new release
+
+ -- Jeremy Bicha <jbicha@debian.org>  Tue, 13 Mar 2018 20:55:10 -0400
+
+sysprof (3.27.91-2) experimental; urgency=medium
+
+  * Cherry-pick patch to fix build on 32-bit architectures
+
+ -- Jeremy Bicha <jbicha@debian.org>  Wed, 21 Feb 2018 19:01:27 -0500
+
+sysprof (3.27.91-1) experimental; urgency=medium
+
+  * New upstream development release
+  * Update Vcs fields for migration to https://salsa.debian.org/
+  * Bump debhelper compat to 11
+  * Build with meson
+
+ -- Jeremy Bicha <jbicha@debian.org>  Wed, 21 Feb 2018 18:08:35 -0500
+
+sysprof (3.26.1-1) unstable; urgency=medium
+
+  * New upstream release
+  * Bump Standards-Version to 4.1.1
+
+ -- Jeremy Bicha <jbicha@debian.org>  Tue, 03 Oct 2017 18:18:18 -0400
+
+sysprof (3.26.0-2) unstable; urgency=medium
+
+  * debian/rules:
+    - Add --with-sysprofd=bundled and
+      --with-systemdsystemunitdir=/lib/systemd/system
+
+ -- Jeremy Bicha <jbicha@debian.org>  Thu, 21 Sep 2017 15:25:04 -0400
+
+sysprof (3.26.0-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Jeremy Bicha <jbicha@debian.org>  Fri, 15 Sep 2017 20:56:49 -0400
+
+sysprof (3.25.92-1) unstable; urgency=medium
+
+  * New upstream release
+  * Drop alignment build fix patch: Applied in new release.
+
+ -- Jeremy Bicha <jbicha@debian.org>  Tue, 05 Sep 2017 20:32:14 -0400
+
+sysprof (3.24.1-1) unstable; urgency=medium
+
+  [ Jeremy Bicha ]
+  * New upstream version 3.24.1
+  * debian/control.in: Bump minimum GTK+
+  * Drop all patches, applied in new release
+
+  [ Andreas Henriksson ]
+  * Bump Standards-Version to 4.1.0
+  * Update Homepage to gnome wiki apps page
+  * Re-add armel/armhf/mipsel alignment build fix patch
+
+ -- Andreas Henriksson <andreas@fatal.se>  Mon, 28 Aug 2017 13:48:18 +0200
+
+sysprof (3.22.3-3) unstable; urgency=medium
+
+  * Add patch to really fix arm build problems (bgo#784466)
+    - d/p/0001-alignment-fix-armel-armhf-mipsel-build-failure.patch
+
+ -- Andreas Henriksson <andreas@fatal.se>  Mon, 03 Jul 2017 09:26:47 +0200
+
+sysprof (3.22.3-2) unstable; urgency=medium
+
+  * Cherry-pick additional patches to unbreak arm/mips build
+    - d/p/visualizer-use-cast-macro-with-type-check.patch
+    - d/p/zoom-manager-bring-back-attribute-aligned-8.patch
+
+ -- Andreas Henriksson <andreas@fatal.se>  Sun, 02 Jul 2017 12:41:47 +0200
+
+sysprof (3.22.3-1) unstable; urgency=medium
+
+  * New upstream version 3.22.3
+  * Drop d/p/fix-arm-mipsel-alignment.patch, fixed upstream.
+
+ -- Andreas Henriksson <andreas@fatal.se>  Sun, 02 Jul 2017 09:59:28 +0200
+
+sysprof (3.22.2-1) unstable; urgency=medium
+
+  * New upstream release
+  * Drop patches which have been merged upstream
+
+ -- Michael Biebl <biebl@debian.org>  Sat, 05 Nov 2016 14:58:38 +0100
+
+sysprof (3.22.1-2) unstable; urgency=medium
+
+  * Add debian/patches/fix-arm-mipsel-alignment.patch
+
+ -- Andreas Henriksson <andreas@fatal.se>  Sun, 16 Oct 2016 14:51:40 +0200
+
+sysprof (3.22.1-1) unstable; urgency=medium
+
+  * Add debian/gbp.conf
+    - mainly to specify pristine-tar usage so gbp clone picks it up
+  * Bump dh compat to 10
+    - this has automatic dh-autoreconf
+    - run autogen.sh script via dh-autoreconf instead of overriding
+      dh_auto_configure to get the right set of configure flags
+      automagically, eg. --libexecdir
+  * Move dropping of files to dh_install
+  * Bump Standards-Version to 3.9.8
+  * Drop unused cross-compiling configure flags
+  * Pass --as-needed via dh-autoreconf and DEB_LDFLAGS_MAINT_APPEND
+  * Fix noopt build option and drop implicit CFLAGS
+  * Drop menu file as we're already shipping a desktop file
+  * Update debian/watch for new tarball location
+  * New upstream version 3.22.1
+  * Don't have dh-autoreconf run ./autogen.sh as it's no longer shipped
+  * Drop all (unused) debian/patches
+  * Cherry-pick patch from upstream commit 4b95b38c0a2f984fc
+  * Add debian/patches/pwrite-unused-result.patch
+  * Cherry-pick upstream commit a760a6ca1028f9
+
+ -- Andreas Henriksson <andreas@fatal.se>  Sat, 15 Oct 2016 11:34:14 +0200
+
+sysprof (3.22.0-1) unstable; urgency=medium
+
+  * [d45f0e7] Drop Debian specific icon and .desktop file. Provided by
+    upstream now. Thanks to Matthias Liertzer (Closes: #836151)
+  * [31b3a54] Fix Vcs URLs
+  * [4c731ac] New upstream version 3.22.0
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Fri, 30 Sep 2016 15:25:15 +0530
+
+sysprof (3.21.91-2) unstable; urgency=medium
+
+  * [61ba4d7] Make changes to comply inline with pkg-gnome team's
+    practices. Thanks to Andreas Henriksson
+  * Upload to Unstable. As it seems, experimental's toolchain is
+    terribly outdated. I've built this package on the failing
+    architectures, successfully, locally in my setup.
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Tue, 20 Sep 2016 20:00:43 +0530
+
+sysprof (3.21.91-1) experimental; urgency=medium
+
+  * [13da931] Move packaging under pkg-gnome and add Andreas to Uploaders
+  * [be59e93] New upstream version 3.21.91
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Mon, 19 Sep 2016 16:52:28 +0530
+
+sysprof (3.21.90-2) experimental; urgency=medium
+
+  * [1cc3198] Add patch to have fallback memory barrier on unspecified
+    architectures
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Wed, 24 Aug 2016 15:55:29 +0530
+
+sysprof (3.21.90-1) experimental; urgency=medium
+
+  * [bda0b9d] Imported Upstream version 3.21.90
+  * [3865934] Drop all patches. New release 3.21.90 has all those
+    changes
+  * [49b78bd] Bump build dependency on libgtk-3-dev
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Tue, 23 Aug 2016 15:47:31 +0530
+
+sysprof (3.20.0-3) unstable; urgency=medium
+
+  * [ba8b520] Add some more build fixes from upstream repo
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Sat, 20 Aug 2016 22:52:35 +0530
+
+sysprof (3.20.0-2) unstable; urgency=medium
+
+  * [1b53d03] Add patch to fix "cast to pointer from integer of
+    different size" build failures on powerpc and i386
+  * [fb9f468] Enable sysprof for all Linux architectures
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Sat, 20 Aug 2016 15:55:17 +0530
+
+sysprof (3.20.0-1) unstable; urgency=medium
+
+  * [2e5d944] Imported Upstream version 3.20.0
+    (Closes: #833827)
+  * [14d4197] Enable Hardening Build
+  * [0a04f28] Bump DH Compat level to 9
+  * [2e97dab] Drop patch Don-t-install-udev-rule.patch.
+    Not needed anymore
+  * [8971ce1] Add itstool to build depends
+  * [db178cd] Add libpolkit-backend-1-dev to build depends
+  * [f960daf] Switch UI to gtk3
+  * [6215fe5] Update Vcs url links
+  * [266157b] Add News entry from upstream news
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Wed, 17 Aug 2016 21:21:32 +0530
+
+sysprof (1.2.0-3) unstable; urgency=low
+
+  * Upload to unstable
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Sun, 16 Jun 2013 13:49:53 +0530
+
+sysprof (1.2.0-2) experimental; urgency=low
+
+  * [c7b08ce] Add support for powerpc architecture (Closes: #689966)
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Fri, 12 Oct 2012 14:16:11 +0530
+
+sysprof (1.2.0-1) experimental; urgency=low
+
+  [ Franz Pletz ]
+  * New upstream release
+  * [abc819c] Update patch Don-t-install-udev-rule.patch
+  * [f02966c] Bump Standards-Version to 3.9.3, no changes required
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Tue, 25 Sep 2012 15:30:55 +0530
+
+sysprof (1.1.8-1) unstable; urgency=low
+
+  * New upstream release (Closes: #634014)
+  * [9e72a4d] drop patch Call-gdk_flush-in-set_busy.patch
+  * [9e158a6] update patch Don-t-install-udev-rule.patch
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Tue, 26 Jul 2011 12:55:14 +0530
+
+sysprof (1.1.6-2) unstable; urgency=low
+
+  * Upload to unstable
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Mon, 13 Jun 2011 23:05:39 +0530
+
+sysprof (1.1.6-1) experimental; urgency=low
+
+  [ Pauli Nieminen ]
+  * [60298da] New upstream release
+  * [5b9b9e4] Update the packaging to match sources
+  * [fcb913a] Cherry-pick upstream cursor fix
+
+  [ Ritesh Raj Sarraf ]
+  * New Upstream Release (Closes: #628979)
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Sat, 11 Jun 2011 17:40:37 +0530
+
+sysprof (1.0.12-5) unstable; urgency=low
+
+  * [04a0737] use arch type from DEB_HOST_MULTIARCH
+  * [60b14e6] fix build compatibilities with newer linker (and binutils-gold)
+    (Closes: #556482)
+  * [17bad84] comply package description with lintian standards
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Wed, 04 May 2011 00:05:22 +0530
+
+sysprof (1.0.12-4) unstable; urgency=low
+
+  * Upload to unstable
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Thu, 10 Feb 2011 20:19:07 +0530
+
+sysprof (1.0.12-3) experimental; urgency=low
+
+  * DKMS-ification of the package's kernel module
+    + Add new package sysprof-module-dkms
+  * Update Standards Version to 3.9.1 (No Changes Required)
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Sun, 03 Oct 2010 18:06:11 +0530
+
+sysprof (1.0.12-2) unstable; urgency=low
+
+  * Take maintenance (Closes: #445205)
+  * Update Standards Version to 3.8.4 (No changes required)
+  * Add homepage and Vcs details
+  * Add misc:Depends to make it lintian clean
+  * Update module version to current package version
+  * Drop autotools-dev and automake1.9 from build depends
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Sun, 13 Jun 2010 15:09:31 +0530
+
+sysprof (1.0.12-1) unstable; urgency=low
+
+  * Orphan package
+  * New upstream release
+    + Fix compiling on amd64 with kernel >= 2.6.25 (Closes: #508265)
+  * Change sysprof-module-source to Architecture: all since the package
+    itself is not architecture-dependent
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Sun, 14 Dec 2008 22:55:07 +0000
+
+sysprof (1.0.11-0.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * New upstream release.
+    + Don't use proc_root. (Closes: #484838).
+  * Remove encoding tag from desktop file.
+  * Fix copyright line in debian/copyright.
+  * Bump Standards Version to 3.8.0. (No changes needed).
+
+ -- Barry deFreese <bdefreese@debian.org>  Wed, 29 Oct 2008 13:57:20 -0400
+
+sysprof (1.0.10-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Samuel Mimram <smimram@debian.org>  Fri, 06 Jun 2008 00:53:57 +0200
+
+sysprof (1.0.9-2) unstable; urgency=low
+
+  * Link statically with libbfd (thanks Michel Dänzer), closes: #439272.
+  * Better help message when module is not found (thanks Daniel Hahler),
+    closes: #462321.
+
+ -- Samuel Mimram <smimram@debian.org>  Fri, 25 Jan 2008 19:29:19 +0100
+
+sysprof (1.0.9-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Samuel Mimram <smimram@debian.org>  Thu, 15 Nov 2007 11:06:43 +0000
+
+sysprof (1.0.8-4) unstable; urgency=low
+
+  * Added a .desktop file, closes: #444132.
+
+ -- Samuel Mimram <smimram@debian.org>  Tue, 09 Oct 2007 11:24:47 +0000
+
+sysprof (1.0.8-3) unstable; urgency=low
+
+  * Rebuild against latest binutils, closes: #434361.
+
+ -- Samuel Mimram <smimram@debian.org>  Thu, 09 Aug 2007 10:41:01 +0200
+
+sysprof (1.0.8-2) unstable; urgency=low
+
+  * Don't build sysprof on ia64 since it is not supposed to be useable on this
+    arch, closes: #422573.
+
+ -- Samuel Mimram <smimram@debian.org>  Mon, 07 May 2007 10:11:07 +0200
+
+sysprof (1.0.8-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Samuel Mimram <smimram@debian.org>  Mon, 25 Dec 2006 23:17:31 +0000
+
+sysprof (1.0.7-1) unstable; urgency=low
+
+  * New upstream release.
+  * Let dh_installmodule take care of the modules, closes: #381769.
+  * Updated package_version.dpatch.
+
+ -- Samuel Mimram <smimram@debian.org>  Mon, 20 Nov 2006 10:14:50 +0000
+
+sysprof (1.0.3-2) unstable; urgency=low
+
+  * Build-depend on binutils-dev (>= 2.17-1), closes: #378413.
+
+ -- Samuel Mimram <smimram@debian.org>  Sun, 16 Jul 2006 10:15:09 +0000
+
+sysprof (1.0.3-1) unstable; urgency=low
+
+  * New upstream release.
+  * Does not crash anymore, closes: #370129.
+
+ -- Samuel Mimram <smimram@debian.org>  Sat, 10 Jun 2006 11:57:07 +0200
+
+sysprof (1.0.2-2) unstable; urgency=low
+
+  * Rebuild in order to avoid a SEGV, closes: #370129.
+  * Updated standards version to 3.7.2, no changes needed.
+
+ -- Samuel Mimram <smimram@debian.org>  Sun,  4 Jun 2006 16:49:53 +0200
+
+sysprof (1.0.2-1) unstable; urgency=low
+
+  * New upstream release.
+  * Added foreign_kernel.dpatch to avoid the need of a configure when building
+    the module.
+  * Removed x86_64.dpatch, integrated upstream.
+
+ -- Samuel Mimram <smimram@debian.org>  Fri,  3 Mar 2006 22:32:02 +0100
+
+sysprof (1.0.1-4) unstable; urgency=low
+
+  * Module should now be compilable for a kernel diffrent from the one
+    currently running, closes: #352305.
+
+ -- Samuel Mimram <smimram@debian.org>  Sun, 12 Feb 2006 17:29:32 +0100
+
+sysprof (1.0.1-3) unstable; urgency=low
+
+  * Using dpatch to handle patches.
+  * Added x86_64.dpatch to correct and int / long mismatch.
+  * Installing documentation in sysprof-module-source too.
+  * Added an icon for menu.
+
+ -- Samuel Mimram <smimram@debian.org>  Wed, 11 Jan 2006 19:08:08 +0100
+
+sysprof (1.0.1-2) unstable; urgency=low
+
+  * Supported archs are only i386, amd64 and ia64.
+  * Enhanced description.
+
+ -- Samuel Mimram <smimram@debian.org>  Sat, 31 Dec 2005 01:00:29 +0100
+
+sysprof (1.0.1-1) unstable; urgency=low
+
+  * Initial release, closes: #344906.
+
+ -- Samuel Mimram <smimram@debian.org>  Tue, 27 Dec 2005 14:12:01 +0100

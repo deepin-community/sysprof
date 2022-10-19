@@ -1,0 +1,221 @@
+Overview of changes in Sysprof 3.40.1
+=====================================
+
+ * Fix build system issue which caused symbols from libsysprof-capture.a to leak
+   into the ABI of libraries consuming it. This was due to inheritance of GNU
+   default symbol visibility. A recompilation of those libraries is necessary.
+
+Overview of changes in Sysprof 3.40.0
+=====================================
+
+ * Improve symbol resolving on OSTree-based systems
+ * Translation updates
+
+Overview of changes in Sysprof 3.39.94
+======================================
+
+ * Fix some licenses in headers.
+ * Add API to sysprofd/libsysprof to tweak.
+   /proc/sys/kernel/perf_event_paranoid to improve capture quality.
+   Tooling will now always try to change this value while profiling
+   the system and ignore upon failure.
+ * ftruncate() before overwriting proc files.
+ * GTK aid has been removed as it is always enabled through the
+   use of control-fd now.
+ * Add a new Overlay capture frame type for mapping overlays between
+   the host and the process filesystem namespace.
+ * Use overlays to map podman containers to overlay directories
+ * Use overlays to map flatpak containers to overlay directories for
+   both /app and /usr.
+
+Overview of changes in Sysprof 3.39.92
+======================================
+
+ * Use pic when compiling static libsysprof-capture
+ * Some changes to podman symbol decoding
+ * Handle NULL readers gracefully from capture cursors
+ * Use g_memdup2()
+ * UI tweaks
+ * Translation updates
+
+Overview of changes in Sysprof 3.39.90
+======================================
+
+ * Build fixes for macOS
+ * polkit is optional (again) for sysprof-cli
+ * Various fixes in kernel symbol resolving
+ * Fix build when stack-protector is not used
+ * Support elfparser on some interesting platforms
+ * Translation updates
+
+Overview of changes in Sysprof 3.38.1
+=====================================
+
+ * Support for translating paths to binary symbols has been improved when using
+   Btrfs subvolumes.
+ * Build system fixes
+ * Fixes for sysprof_capture_reader_list_files() to match expectations
+ * Load proper speedtrack library in LD_PRELOAD
+ * Fixes when generating pkg-config files
+ * Fixes when using musl libc
+ * Translation updates
+
+Overview of changes in Sysprof 3.38.0
+=====================================
+
+ * Translation updates
+
+Overview of changes in Sysprof 3.37.92
+======================================
+
+ * Build system fixes
+ * Fix incorrect warnings
+ * Add various missing capture APIs for GTK
+ * Be more careful about when polkit is queried
+ * Translation updates
+
+Overview of changes in Sysprof 3.37.90
+======================================
+
+ * Various build fixes
+ * Translation updates
+
+Overview of changes in Sysprof 3.37.2
+=====================================
+
+ * sysprof-capture no longer requires GLib and therefore the ABI has
+   been bumped to 4. This allowed Sysprof to be used form GLib without
+   circular dependencies
+ * Various UI tweaks
+ * Support for use as a subproject
+
+Overview of changes in Sysprof 3.36.0
+=====================================
+
+ * Preload library has been moved to $libdir from $libexecdir
+ * Build system improvements
+ * Fix whole-system capture setting when using "Record Again" feature
+ * New SysprofCollector interfaces for samples, marks, and logs to
+   sit alongside allocations
+ * Translation updates
+
+Overview of changes in Sysprof 3.35.92
+======================================
+
+ * A new profiler for tracking memory allocations within processes
+   that are spawned by Sysprof. Select "Track Allocations" to use
+   an LD_PRELOAD module which monitors allocations within the target
+   process. A callgraph is provided with allocations and their stack
+   traces. This brings the main features of the venerable "Memprof"
+   into Sysprof.
+ * Port Sysprof to work on RHEL 7
+ * Improvements to marks and counters displays
+ * A new data frame in libsysprof-capture for memory allocations
+   with stack traces.
+ * sysprof-cli --merge can now be used to merge multiple syscap
+   files together.
+ * sysprof <program-path> can now be used to open Sysprof directly
+   to a program to execute.
+ * Sysprof now builds with additional security protections and
+   optimization flags such as -Bsymbolic, -Wl,-z,defs, -Wl,-z,now,
+   and -Wl,-z,relro.
+ * Fixes for macOS
+ * The ELF symbol resolver is faster
+ * sysprof-cli now properly adds supplemental information to the
+   capture file such as decoded symbols. This makes sharing syscap
+   files across machines easier and more reliable.
+ * A new mmap()'d ring buffer can be shared between processes for
+   faster data transfer to sysprof. We expect more features around
+   this SysprofCollector interface in future releases.
+ * A new set if icons has been provided for the collectors
+ * Translation updates
+
+Overview of changes in Sysprof 3.35.2
+=====================================
+
+ * Build and test fixes
+ * Track changes to gdbus-codegen
+ * Include additional pkg-config variable for access to D-Bus data
+ * Translation updates
+
+Overview of changes in Sysprof 3.34.1
+=====================================
+
+ * Process search fixes
+
+Overview of changes in Sysprof 3.34.0
+=====================================
+
+ * Help fixes
+ * Build and test fixes
+ * Translation updates
+
+Overview of changes in Sysprof 3.33.92
+======================================
+
+ • Check for GLib 2.61.3 or newer for features used when removing deprecated
+   API usage from GLib.
+ • Require meson 0.50
+ • Translation updates
+
+Overview of changes in Sysprof 3.33.90
+======================================
+
+ • Tweak CSS styling a bit
+ • Hide RAPL rows if no counters were discovered
+ • Fix --no-battery in sysprof-cli
+ • Improve parsing of /proc/mounts and /proc/pid/mountinfo
+ • Improve support for using libsysprof from Flatpak
+ • Symbol directories are removed from public ABI and consumers should
+   now add directories to SysprofElfSymbolResolver directly
+
+Overview of changes in Sysprof 3.33.4
+=====================================
+
+ • Build system fixes and improved backports
+ • New network, disk, battery, and energy sources
+ • Additional options for sysprof-cli including "syprof-cli -- command"
+   support.
+ • i18n is now properly initialized at startup
+ • Improved styling
+ • A new "duplex" graph type for read/write type visuals
+
+Overview of changes in Sysprof 3.33.3
+=====================================
+
+This release of Sysprof contains the largest amount of work since we revived
+the project a few years ago. We have revamped and minimized the ABI of
+libsysprof-ui considerably. As port of the ABI update, symbols have been
+changed from Sp to Sysprof to reduce chances of collisions.
+
+With these changes comes a soname bump and upgrade of the D-Bus API provided
+by the package. Some work has been taken to implement older versions of the
+sysprofd API so that older clients may continue to work.
+
+ • Various build system improvements
+ • A new libsysprof-capture-3.a capture library has been provided to allow
+   application developers to capture data and merge into the profiler stream.
+ • The recording and viewing API has been redesigned and improved.
+ • Sysprof has been backported to support GTK 3.22 and GLib 2.50.
+ • Support for passing file-descriptors has been added to allow profiling
+   integration with GNOME Shell, GJS, and GTK profilers.
+ • New API to allow integration with external tooling that spawns applications
+   is provided so that environment and arguments may be modified.
+ • A new re-record feature has been added.
+ • The capture format can now store log messages, metadata, and file content.
+ • A new org.gnome.Sysprof3 daemon has been added, which is written using
+   GDBus instead of libsystemd. This may improve portability to some
+   distributions.
+ • The portability of Sysprof to non-Linux systems has been improved, however
+   many recording features are still not available on non-Linux platforms.
+ • A new org.gnome.Sysprof3.Profiler XML D-Bus interface is provided for
+   tooling that wants to export Sysprof content via D-Bus.
+ • Various new capture sources have been provided.
+ • sysprofd also implements a compat org.gnome.Sysprof2 D-Bus end-point
+   for older clients.
+ • Translation updates
+
+Happy Profiling,
+
+-- Christian
+
