@@ -16,16 +16,15 @@ cat > trivial.c <<EOF
 #include <sysprof.h>
 
 #undef _NDEBUG
-#include <assert.h>
 
 int main(void)
 {
-    assert(SYSPROF_TYPE_PROFILE != 0);
+    sysprof_callgraph_flags_get_type();
     return 0;
 }
 EOF
 
 # Deliberately word-splitting pkg-config's output:
 # shellcheck disable=SC2046
-"${CROSS_COMPILE}gcc" -otrivial trivial.c $("${CROSS_COMPILE}pkg-config" --cflags --libs sysprof-4)
+"${CROSS_COMPILE}gcc" -otrivial trivial.c $("${CROSS_COMPILE}pkg-config" --cflags --libs sysprof-6)
 ./trivial

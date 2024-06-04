@@ -1,5 +1,9 @@
 #mesondefine API_VERSION_S
 
+#mesondefine APP_ID
+
+#mesondefine APP_ID_S
+
 #mesondefine DEBUGDIR
 
 #mesondefine DEVELOPMENT_BUILD
@@ -10,7 +14,7 @@
 
 #mesondefine GETTEXT_PACKAGE
 
-#mesondefine HAVE_EXECINFO_H
+#mesondefine HAVE_LIBSYSTEMD
 
 #mesondefine HAVE_PERF_CLOCKID
 
@@ -45,8 +49,6 @@
 #mesondefine PACKAGE_TARNAME
 
 #mesondefine PACKAGE_VERSION
-
-#mesondefine SYMBOLIC_VERSION
 
 #mesondefine VERSION
 

@@ -613,6 +613,66 @@ sysprof_capture_writer_add_map (SysprofCaptureWriter *self,
   _sysprof_strlcpy (ev->filename, filename, len - sizeof *ev);
   ev->filename[len - sizeof *ev - 1] = '\0';
 
+  ((char*)ev)[len-1] = 0;
+
+  self->stat.frame_count[SYSPROF_CAPTURE_FRAME_MAP]++;
+
+  return true;
+}
+
+bool
+sysprof_capture_writer_add_map_with_build_id (SysprofCaptureWriter *self,
+                                              int64_t               time,
+                                              int                   cpu,
+                                              int32_t               pid,
+                                              uint64_t              start,
+                                              uint64_t              end,
+                                              uint64_t              offset,
+                                              uint64_t              inode,
+                                              const char           *filename,
+                                              const char           *build_id)
+{
+  SysprofCaptureMap *ev;
+  size_t len;
+  size_t filename_len;
+  size_t build_id_len;
+
+  if (filename == NULL)
+    filename = "";
+
+  if (build_id == NULL)
+    build_id = "";
+
+  assert (self != NULL);
+  assert (filename != NULL);
+  assert (build_id != NULL);
+
+  filename_len = strlen (filename) + 1;
+  build_id_len = strlen (build_id) + 1;
+
+  len = sizeof *ev + filename_len + strlen("@") + build_id_len;
+
+  ev = (SysprofCaptureMap *)sysprof_capture_writer_allocate (self, &len);
+  if (!ev)
+    return false;
+
+  sysprof_capture_writer_frame_init (&ev->frame,
+                                     len,
+                                     cpu,
+                                     pid,
+                                     time,
+                                     SYSPROF_CAPTURE_FRAME_MAP);
+  ev->start = start;
+  ev->end = end;
+  ev->offset = offset;
+  ev->inode = inode;
+
+  _sysprof_strlcpy (ev->filename, filename, filename_len);
+  ev->filename[filename_len] = '@';
+  _sysprof_strlcpy (&ev->filename[filename_len+1], build_id, build_id_len);
+
+  ((char*)ev)[len-1] = 0;
+
   self->stat.frame_count[SYSPROF_CAPTURE_FRAME_MAP]++;
 
   return true;
@@ -707,6 +767,50 @@ sysprof_capture_writer_add_metadata (SysprofCaptureWriter *self,
   return true;
 }
 
+bool
+sysprof_capture_writer_add_dbus_message (SysprofCaptureWriter *self,
+                                         int64_t               time,
+                                         int                   cpu,
+                                         int32_t               pid,
+                                         uint16_t              bus_type,
+                                         uint16_t              flags,
+                                         const uint8_t        *message_data,
+                                         size_t                message_len)
+{
+  SysprofCaptureDBusMessage *ev;
+  size_t len;
+
+  assert (self != NULL);
+  assert (message_data != NULL || message_len == 0);
+
+  if (message_len > (1<<16) - sizeof *ev - 16)
+    {
+      flags |= SYSPROF_CAPTURE_DBUS_FLAGS_MESSAGE_TOO_LARGE;
+      message_data = NULL;
+      message_len = 0;
+    }
+
+  len = sizeof *ev + message_len;
+
+  ev = (SysprofCaptureDBusMessage *)sysprof_capture_writer_allocate (self, &len);
+  if (!ev)
+    return false;
+
+  sysprof_capture_writer_frame_init (&ev->frame,
+                                     len,
+                                     cpu,
+                                     pid,
+                                     time,
+                                     SYSPROF_CAPTURE_FRAME_DBUS_MESSAGE);
+
+  ev->bus_type = bus_type;
+  ev->flags = flags;
+  ev->message_len = message_len;
+  memcpy (ev->message, message_data, message_len);
+
+  return true;
+}
+
 SysprofCaptureAddress
 sysprof_capture_writer_add_jitmap (SysprofCaptureWriter *self,
                                    const char           *name)
@@ -794,6 +898,42 @@ sysprof_capture_writer_add_sample (SysprofCaptureWriter        *self,
   memcpy (ev->addrs, addrs, (n_addrs * sizeof (SysprofCaptureAddress)));
 
   self->stat.frame_count[SYSPROF_CAPTURE_FRAME_SAMPLE]++;
+
+  return true;
+}
+
+bool
+sysprof_capture_writer_add_trace (SysprofCaptureWriter        *self,
+                                  int64_t                      time,
+                                  int                          cpu,
+                                  int32_t                      pid,
+                                  int32_t                      tid,
+                                  const SysprofCaptureAddress *addrs,
+                                  unsigned int                 n_addrs,
+                                  bool                         entering)
+{
+  SysprofCaptureTrace *ev;
+  size_t len;
+
+  assert (self != NULL);
+
+  len = sizeof *ev + (n_addrs * sizeof (SysprofCaptureAddress));
+
+  ev = (SysprofCaptureTrace *)sysprof_capture_writer_allocate (self, &len);
+  if (!ev)
+    return false;
+
+  sysprof_capture_writer_frame_init (&ev->frame,
+                                     len,
+                                     cpu,
+                                     pid,
+                                     time,
+                                     SYSPROF_CAPTURE_FRAME_SAMPLE);
+  ev->n_addrs = n_addrs;
+  ev->tid = tid;
+  ev->entering = !!entering;
+
+  memcpy (ev->addrs, addrs, (n_addrs * sizeof (SysprofCaptureAddress)));
 
   return true;
 }
@@ -1659,7 +1799,7 @@ _sysprof_capture_writer_add_raw (SysprofCaptureWriter      *self,
     return false;
 
   assert (fr->len == len);
-  assert (fr->type < 16);
+  assert (fr->type < SYSPROF_CAPTURE_FRAME_LAST);
 
   memcpy (begin, fr, fr->len);
 
@@ -1667,4 +1807,15 @@ _sysprof_capture_writer_add_raw (SysprofCaptureWriter      *self,
     self->stat.frame_count[fr->type]++;
 
   return true;
+}
+
+int
+_sysprof_capture_writer_dup_fd (SysprofCaptureWriter *self)
+{
+  assert (self != NULL);
+
+  if (self->fd == -1)
+    return -1;
+
+  return dup (self->fd);
 }

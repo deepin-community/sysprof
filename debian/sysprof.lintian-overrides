@@ -1,0 +1,4 @@
+# sysprofd is D-Bus-activated and does not need to be started during boot.
+systemd-service-file-missing-install-key [*/systemd/system/sysprof3.service]
+# On non-systemd systems, traditional D-Bus activation is used
+package-supports-alternative-init-but-no-init.d-script [*/systemd/system/sysprof3.service]

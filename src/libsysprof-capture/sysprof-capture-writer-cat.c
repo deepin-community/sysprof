@@ -391,6 +391,24 @@ sysprof_capture_writer_cat (SysprofCaptureWriter *self,
             break;
           }
 
+        case SYSPROF_CAPTURE_FRAME_DBUS_MESSAGE:
+          {
+            const SysprofCaptureDBusMessage *frame;
+
+            if (!(frame = sysprof_capture_reader_read_dbus_message (reader)))
+              goto panic;
+
+            sysprof_capture_writer_add_dbus_message (self,
+                                                     frame->frame.time,
+                                                     frame->frame.cpu,
+                                                     frame->frame.pid,
+                                                     frame->bus_type,
+                                                     frame->flags,
+                                                     frame->message,
+                                                     frame->message_len);
+            break;
+          }
+
         case SYSPROF_CAPTURE_FRAME_SAMPLE:
           {
             const SysprofCaptureSample *frame;
@@ -411,6 +429,32 @@ sysprof_capture_writer_cat (SysprofCaptureWriter *self,
                                                  frame->tid,
                                                  addrs,
                                                  frame->n_addrs);
+            }
+
+            break;
+          }
+
+        case SYSPROF_CAPTURE_FRAME_TRACE:
+          {
+            const SysprofCaptureTrace *frame;
+
+            if (!(frame = sysprof_capture_reader_read_trace (reader)))
+              goto panic;
+
+            {
+              SysprofCaptureAddress addrs[frame->n_addrs];
+
+              for (unsigned int z = 0; z < frame->n_addrs; z++)
+                addrs[z] = translate_table_translate (tables, TRANSLATE_ADDR, frame->addrs[z]);
+
+              sysprof_capture_writer_add_trace (self,
+                                                frame->frame.time,
+                                                frame->frame.cpu,
+                                                frame->frame.pid,
+                                                frame->tid,
+                                                addrs,
+                                                frame->n_addrs,
+                                                frame->entering);
             }
 
             break;
