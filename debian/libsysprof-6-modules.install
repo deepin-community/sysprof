@@ -1,0 +1,3 @@
+usr/lib/${DEB_HOST_MULTIARCH}/libsysprof-memory-6.so
+usr/lib/${DEB_HOST_MULTIARCH}/libsysprof-speedtrack-6.so
+usr/lib/${DEB_HOST_MULTIARCH}/libsysprof-tracer-6.so

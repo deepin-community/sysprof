@@ -1,1 +1,1 @@
-disable_test_dbus_system.patch
+hppa-mapped-ring-buffer.patch

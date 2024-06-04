@@ -1,8 +1,284 @@
-sysprof (3.40.1-3) UNRELEASED; urgency=medium
+sysprof (46.0-1) unstable; urgency=medium
 
-  * update
+  * New upstream release
+  * debian/libsysporf-6-6.symbols: Add new symbols
 
- -- Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>  Mon, 06 Jun 2022 19:59:58 +0800
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Thu, 28 Mar 2024 15:52:55 -0400
+
+sysprof (46~rc-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Mon, 11 Mar 2024 17:57:00 -0400
+
+sysprof (46~beta-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Sat, 17 Feb 2024 14:58:57 -0500
+
+sysprof (45.2-1) unstable; urgency=medium
+
+  * New upstream release
+  * Stop using debian/control.in and dh_gnome_clean
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 16 Feb 2024 07:26:29 -0500
+
+sysprof (45.1-2) unstable; urgency=medium
+
+  [ John David Anglin ]
+  * Add patch to fix hppa issue noticed in build tests (Closes: #1021853)
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Tue, 24 Oct 2023 17:21:44 -0400
+
+sysprof (45.1-1) unstable; urgency=medium
+
+  * New upstream release
+  * Extend dh_auto_test timeout (Closes: #1021853)
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Tue, 24 Oct 2023 13:40:54 -0400
+
+sysprof (45.0-2) unstable; urgency=medium
+
+  * Team upload
+  * Install the systemd unit in /usr/lib/systemd/system.
+    This was allowed by Technical Committee resolution #1053901. sysprof
+    has not usually been backported, so it doesn't seem important to make
+    backports trivial for this particular package.
+    Build-depend on debhelper (>= 13.11.6~) so that dh_installsystemd finds
+    the unit in its new location.
+
+ -- Simon McVittie <smcv@debian.org>  Fri, 20 Oct 2023 11:52:19 +0100
+
+sysprof (45.0-1) unstable; urgency=medium
+
+  * New upstream release
+  * Fix nogui build profile (Closes: #1051104)
+  * Drop unnecessary Build-Depends on cairo; gtk4 already pulls it in
+  * Drop unnecessary Build-Depends on systemd
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Mon, 18 Sep 2023 08:28:51 -0400
+
+sysprof (45~rc-1) unstable; urgency=medium
+
+  * New upstream release
+  * libunwind is now a required build dependency
+  * debian/libsysprof-6-dev.install: Install additional header file
+  * Don't build sysprof GUI on i386; it's no longer need by mutter i386
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 01 Sep 2023 21:04:30 -0400
+
+sysprof (45~beta-6) unstable; urgency=medium
+
+  * Fix Build-Depends for i386
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 01 Sep 2023 09:45:15 -0400
+
+sysprof (45~beta-5) unstable; urgency=medium
+
+  * Fix configure flags
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 01 Sep 2023 08:58:42 -0400
+
+sysprof (45~beta-4) unstable; urgency=medium
+
+  * Build sysprof GUI package on Debian's i386 (but not Ubuntu's)
+    It ships a D-Bus interface needed by the mutter build
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 01 Sep 2023 07:52:01 -0400
+
+sysprof (45~beta-3) unstable; urgency=medium
+
+  * Release to unstable
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Wed, 30 Aug 2023 18:44:32 -0400
+
+sysprof (45~beta-2) experimental; urgency=medium
+
+  * Resume building GUI packages on riscv64 since gtk4 is bootstrapped there
+  * Stop building sysprof GUI on i386
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Tue, 22 Aug 2023 15:25:56 -0400
+
+sysprof (45~beta-1) experimental; urgency=medium
+
+  [ Jeremy Bícha ]
+  * New upstream release (LP: #2031972)
+  * debian/control.in: Bump minimum GTK4, glib, & libadwaita
+  * debian/control.in: Build-Depend on libdex-dev & libpanel-dev
+  * Drop obsolete patch
+  * Update packaging for soname bump
+    - libsysprof-ui is no longer provided
+    - libsysprof-capture remains at API 4 (but headers are in 6 directory)
+    - The other libraries are bumped to API 6
+    - One more library is added to the group library package, libsysprof-tracer
+
+  [ Nathan Pratta Teodosio ]
+  * Update libsysprof autopkgtest
+
+  [ Simon McVittie ]
+  * Give libsysprof-6-6 its Policy-compliant name.
+    Move the LD_PRELOAD modules libsysprof-*-6.so into their own separate
+    package, libsysprof-6-modules.
+  * d/control.in: Remove unnecessary Breaks/Replaces.
+    After the SONAME bump, only libsysprof-capture-4-dev has any files
+    that were previously in libsysprof-4-dev or sysprof.
+  * Remove unused lintian overrides for libsysprof-4
+  * d/sysprof.lintian-overrides: Remove overrides that no longer apply
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Sat, 19 Aug 2023 12:38:27 -0400
+
+sysprof (3.48.0-5) unstable; urgency=medium
+
+  * debian/gbp.conf: Branch for trixie
+  * Resume building GUI packages on riscv64 since gtk4 is bootstrapped there
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Tue, 22 Aug 2023 15:18:05 -0400
+
+sysprof (3.48.0-4) unstable; urgency=medium
+
+  * Team upload
+  * d/control.in: Version the libunwind-dev dependency.
+    This package expects the libunwind-dev from src:libunwind, which
+    provides a larger API than the libunwind-*-dev from LLVM: in particular,
+    the standalone libunwind has pkg-config metadata but LLVM's libunwind
+    does not. LLVM's libunwind Provides libunwind-dev even though it does
+    not provide all of the same functionality, causing intermittent FTBFS
+    when the non-default apt dependency resolver used by sbuild for
+    experimental happens to choose LLVM's libunwind-*-dev to satisfy the
+    dependency.
+    libunwind-*-dev have Provides on libunwind-dev, but it's an unversioned
+    Provides, so we can make sure to get the standalone libunwind by
+    specifying a version (an arbitrarily old version will do).
+    (Mitigates: #1027451)
+  * Upload to unstable
+
+ -- Simon McVittie <smcv@debian.org>  Mon, 07 Aug 2023 23:54:28 +0100
+
+sysprof (3.48.0-3) experimental; urgency=medium
+
+  * Team upload
+  * Split the -dev package between the three libraries.
+    This should help to reduce dependency cycles, in particular between
+    GTK 4 and sysprof.
+  * d/control.in: Don't build sysprof under the pkg.sysprof.nogui profile.
+    sysprof is a GUI.
+  * d/control.in: Remove version constraints unnecessary since Debian 11
+  * d/control.in, d/rules: Disable GUI packages on riscv64 for now.
+    gtk4 is not available there yet.
+  * d/copyright: Update
+  * d/lib*.lintian-overrides: Silence warnings about unusual library naming.
+    It is intentional that there is no libsysprof.so symbolic link:
+    libsysprof-4.so is both the SONAME, and the name used for linking (in
+    the form of -lsysprof-4 in the .pc file).
+  * d/libsysprof-4.symbols: Add more Build-Depends-Package for completeness
+  * d/sysprof.lintian-overrides: Silence false positives for the systemd units
+  * Upload to experimental for NEW processing
+
+ -- Simon McVittie <smcv@debian.org>  Mon, 07 Aug 2023 13:32:05 +0100
+
+sysprof (3.48.0-2) unstable; urgency=medium
+
+  * Update standards version to 4.6.2, no changes needed
+  * Release to unstable
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 21 Jul 2023 13:21:51 -0400
+
+sysprof (3.48.0-1) experimental; urgency=medium
+
+  * New upstream release
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Mon, 27 Mar 2023 10:19:08 -0400
+
+sysprof (3.46.0-4) unstable; urgency=medium
+
+  * Add a pkg.sysprof.nogui profile.
+    This will hopefully remove the dependency loop between sysprof and gtk(4)
+
+ -- Laurent Bigonville <bigon@debian.org>  Mon, 20 Feb 2023 14:36:35 +0100
+
+sysprof (3.46.0-3) unstable; urgency=medium
+
+  * Team upload
+  * d/control.in: Build-depend on polkitd instead of transitional policykit-1
+  * Standards-Version: 4.6.1 (no changes required)
+
+ -- Simon McVittie <smcv@debian.org>  Fri, 14 Oct 2022 10:16:42 +0100
+
+sysprof (3.46.0-2) unstable; urgency=medium
+
+  * Update autopkgtest for soname bump
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Wed, 21 Sep 2022 03:05:03 -0400
+
+sysprof (3.46.0-1) unstable; urgency=medium
+
+  * New upstream release
+  * debian/control.in: Bump minimum glib to 2.73.0
+  * Drop 3 patches that are no longer needed
+  * Release to unstable
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Mon, 19 Sep 2022 17:12:26 -0400
+
+sysprof (3.45.1-2) experimental; urgency=medium
+
+  * Cherry-pick patches to fix symbol leakage to other libraries (LP: #1987301)
+  * debian/*.symbols: Update
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Mon, 22 Aug 2022 15:28:10 -0400
+
+sysprof (3.45.1-1) experimental; urgency=medium
+
+  * New upstream release
+  * Build with gtk4 & libadwaita. Drop libdazzle dependency
+  * Rename libsysprof-ui-4 -> libsysprof-ui-5 to match soname bump
+  * debian/control.in: Build-Depend on desktop-file-utils
+  * debian/control.in: Bump minimum meson to 0.59.0
+  * debian/control.in: Fix Section for "libs" packages, thanks Lintian
+  * debian/rules: Update configure flags
+  * debian/*.symbols: Add new symbols
+  * Refresh patch
+  * Add patch to drop unnecessary glib bump to 2.73
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Thu, 11 Aug 2022 14:48:39 -0400
+
+sysprof (3.44.0-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Mon, 21 Mar 2022 11:30:36 -0400
+
+sysprof (3.43.90-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Jeremy Bicha <jeremy.bicha@canonical.com>  Tue, 08 Mar 2022 08:32:03 -0500
+
+sysprof (3.42.1-3) unstable; urgency=medium
+
+  * No-change rebuild from source
+
+ -- Jeremy Bicha <jeremy.bicha@canonical.com>  Fri, 04 Feb 2022 14:16:05 -0500
+
+sysprof (3.42.1-2) unstable; urgency=medium
+
+  * Split libraries and development files to separate packages
+    (Closes: #971243)
+
+ -- Jeremy Bicha <jeremy.bicha@canonical.com>  Mon, 31 Jan 2022 13:49:54 -0500
+
+sysprof (3.42.1-1) unstable; urgency=medium
+
+  * Team upload
+  * New upstream release
+  * d/sysprof.symbols: Ignore removal of private rax* symbols
+  * d/copyright: Update
+  * Correct name of with_sysprofd build option (Closes: #998597)
+  * d/rules: Explicitly set build options.
+    Explicit is better than implicit here.
+  * Standards-Version: 4.6.0 (no changes required)
+
+ -- Simon McVittie <smcv@debian.org>  Mon, 27 Dec 2021 16:08:31 +0000
 
 sysprof (3.40.1-3) unstable; urgency=medium
 

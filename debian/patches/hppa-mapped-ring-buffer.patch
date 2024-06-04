@@ -1,0 +1,52 @@
+From: John David Anglin <dave.anglin@bell.net>
+Date: Sun, 16 Oct 2022 01:40:46 +0000
+Subject: mapped-ring-buffer: Round to the shared memory boundary on hppa
+
+In map_head_and_body_twice(), the second mmap call fails:
+
+mmap2(NULL, 135168, PROT_READ|PROT_WRITE, MAP_SHARED, 3, 0) = 0xf64a2000
+mmap2(0xf64b3000, 65536, PROT_READ|PROT_WRITE, MAP_SHARED|MAP_FIXED, 3, 0x1000) = -1 EINVAL (Invalid argument)
+
+Due to cache issues, all shared mapping of a page must be equivalently
+mapped.  This requires page mappings to be at the same virtual address
+modulo 4 MB.  Due to a kernel limitation, all mappings to a file must
+be equivalent.
+
+The test can be fixed by rounding the buffer_size used in the mapped
+ring buffer to 4 MB on hppa.  This makes the two mmap mappings equivalent.
+
+Bug-Debian: https://bugs.debian.org/1021853
+---
+ src/libsysprof-capture/mapped-ring-buffer.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/src/libsysprof-capture/mapped-ring-buffer.c b/src/libsysprof-capture/mapped-ring-buffer.c
+index 5ce1b72..b66681b 100644
+--- a/src/libsysprof-capture/mapped-ring-buffer.c
++++ b/src/libsysprof-capture/mapped-ring-buffer.c
+@@ -35,6 +35,7 @@
+ 
+ #define DEFAULT_N_PAGES 63
+ #define BUFFER_MAX_SIZE ((UINT32_MAX/2)-_sysprof_getpagesize())
++#define SHM_COLOUR 0x00400000
+ 
+ enum {
+   MODE_READER    = 1,
+@@ -173,9 +174,16 @@ mapped_ring_buffer_new_reader (size_t buffer_size)
+ 
+   page_size = _sysprof_getpagesize ();
+ 
+-  /* Add 1 page for coordination header */
+   if (buffer_size == 0)
+     buffer_size = page_size * DEFAULT_N_PAGES;
++
++#ifdef __hppa__
++  /* Round buffer_size up to the shared memory colour boundary */
++  buffer_size += SHM_COLOUR - 1;
++  buffer_size &= ~(SHM_COLOUR - 1);
++#endif
++
++  /* Add 1 page for coordination header */
+   buffer_size += page_size;
+ 
+   /* Create our memfd (or tmpfs) for writing */

@@ -2,14 +2,34 @@
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 export DEB_LDFLAGS_MAINT_APPEND = -Wl,-O1 -Wl,-z,defs
+export DPKG_GENSYMBOLS_CHECK_LEVEL = 4
+
+dh_options =
+
+ifneq ($(filter i386,$(DEB_HOST_ARCH)),)
+dh_options += -Nsysprof
+gtk=-Dgtk=false
+endif
+
+ifeq ($(filter sysprof,$(shell dh_listpackages)),)
+gtk=-Dgtk=false
+endif
 
 %:
-	dh  $@
+	dh $@ $(dh_options)
 
 override_dh_auto_configure:
 	dh_auto_configure -- \
-		-Denable_examples=true \
-		-Denable_tests=true \
-		-Denable_tools=true \
-		-Dwith_sysprofd=bundled \
-		-Dsystemdunitdir=/lib/systemd/system
+		-Dsysprofd=bundled \
+		-Dsystemdunitdir=/usr/lib/systemd/system \
+		$(gtk)
+
+override_dh_makeshlibs:
+	# The libraries in libsysprof-6-modules are to be loaded with
+	# LD_PRELOAD, not linked
+	dh_makeshlibs -Nlibsysprof-6-modules
+
+override_dh_auto_test:
+	dh_auto_test --  --timeout-multiplier 2
+
+override_dh_gnome_clean:

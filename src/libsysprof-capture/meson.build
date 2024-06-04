@@ -1,4 +1,6 @@
-libsysprof_capture_headers = files([
+install_static = not meson.is_subproject() and get_option('install-static')
+
+libsysprof_capture_headers = files(
   'sysprof-address.h',
   'sysprof-clock.h',
   'sysprof-capture-condition.h',
@@ -11,14 +13,17 @@ libsysprof_capture_headers = files([
   'sysprof-platform.h',
   'sysprof-capture.h',
   'sysprof-version-macros.h',
-])
+)
 
 if not meson.is_subproject()
   install_headers(libsysprof_capture_headers, subdir: sysprof_header_subdir)
 endif
 
-libsysprof_capture_sources = files([
+mapped_ring_buffer_sources = files(
   'mapped-ring-buffer.c',
+)
+
+libsysprof_capture_sources = files(
   'sysprof-address.c',
   'sysprof-capture-condition.c',
   'sysprof-capture-cursor.c',
@@ -29,7 +34,7 @@ libsysprof_capture_sources = files([
   'sysprof-collector.c',
   'sysprof-clock.c',
   'sysprof-platform.c',
-])
+)
 
 configure_file(
           input: 'sysprof-version.h.in',
@@ -44,13 +49,13 @@ libsysprof_capture_deps = [
 ]
 
 libsysprof_capture = static_library(
-  'sysprof-capture-@0@'.format(libsysprof_api_version),
-  libsysprof_capture_sources,
+  'sysprof-capture-@0@'.format(libsysprof_capture_api_version),
+  (libsysprof_capture_sources +
+   mapped_ring_buffer_sources),
 
            dependencies: libsysprof_capture_deps,
                  c_args: [ '-DSYSPROF_CAPTURE_COMPILATION' ],
-            install_dir: get_option('libdir'),
-                install: not meson.is_subproject(),
+                install: install_static,
   gnu_symbol_visibility: 'hidden',
                     pic: true,
 )
@@ -62,14 +67,18 @@ libsysprof_capture_dep = declare_dependency(
          dependencies: libsysprof_capture_deps,
   include_directories: libsysprof_capture_include_dirs,
 )
+meson.override_dependency('sysprof-capture-@0@'.format(libsysprof_capture_api_version), libsysprof_capture_dep)
 
-if not meson.is_subproject()
+if install_static
   pkgconfig.generate(
                  libsysprof_capture,
         subdirs: [ sysprof_header_subdir ],
     description: 'The static capture library for tools that generate profiling capture data',
-    install_dir: join_paths(get_option('libdir'), 'pkgconfig'),
       variables: [ 'datadir=' + datadir_for_pc_file ],
     libraries_private: libsysprof_capture_deps,
   )
+endif
+
+if get_option('tests')
+  subdir('tests')
 endif

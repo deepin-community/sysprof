@@ -1,0 +1,5 @@
+# these are LD_PRELOAD modules, not libraries
+lacks-ldconfig-trigger usr/lib/*/libsysprof-memory-6.so usr/lib/*/libsysprof-speedtrack-6.so usr/lib/*/libsysprof-tracer-6.so
+no-shlibs usr/lib/*/libsysprof-*-6.so
+no-symbols-control-file usr/lib/*/libsysprof-*-6.so
+package-name-doesnt-match-sonames libsysprof-memory-6 libsysprof-speedtrack-6 libsysprof-tracer-6

@@ -140,10 +140,12 @@ typedef enum
   SYSPROF_CAPTURE_FRAME_FILE_CHUNK   = 13,
   SYSPROF_CAPTURE_FRAME_ALLOCATION   = 14,
   SYSPROF_CAPTURE_FRAME_OVERLAY      = 15,
+  SYSPROF_CAPTURE_FRAME_TRACE        = 16,
+  SYSPROF_CAPTURE_FRAME_DBUS_MESSAGE = 17,
 } SysprofCaptureFrameType;
 
 /* Not part of ABI */
-#define SYSPROF_CAPTURE_FRAME_LAST 16
+#define SYSPROF_CAPTURE_FRAME_LAST 18
 
 SYSPROF_ALIGNED_BEGIN(1)
 typedef struct
@@ -223,6 +225,18 @@ typedef struct
   int32_t               tid;
   SysprofCaptureAddress addrs[0];
 } SysprofCaptureSample
+SYSPROF_ALIGNED_END(1);
+
+SYSPROF_ALIGNED_BEGIN(1)
+typedef struct
+{
+  SysprofCaptureFrame   frame;
+  uint32_t              n_addrs : 16;
+  uint32_t              entering : 1;
+  uint32_t              padding1 : 15;
+  int32_t               tid;
+  SysprofCaptureAddress addrs[0];
+} SysprofCaptureTrace
 SYSPROF_ALIGNED_END(1);
 
 SYSPROF_ALIGNED_BEGIN(1)
@@ -351,12 +365,31 @@ typedef struct
 } SysprofCaptureAllocation
 SYSPROF_ALIGNED_END(1);
 
+SYSPROF_ALIGNED_BEGIN(1)
+typedef struct
+{
+  SysprofCaptureFrame   frame;
+  uint16_t              bus_type : 2;
+  uint16_t              flags : 14;
+  uint16_t              message_len;
+  uint8_t               message[0];
+} SysprofCaptureDBusMessage
+SYSPROF_ALIGNED_END(1);
+
+#define SYSPROF_CAPTURE_DBUS_TYPE_SYSTEM  0
+#define SYSPROF_CAPTURE_DBUS_TYPE_SESSION 1
+#define SYSPROF_CAPTURE_DBUS_TYPE_A11Y    2
+#define SYSPROF_CAPTURE_DBUS_TYPE_OTHER   3
+
+#define SYSPROF_CAPTURE_DBUS_FLAGS_MESSAGE_TOO_LARGE (1<<0)
+
 SYSPROF_STATIC_ASSERT (sizeof (SysprofCaptureFileHeader) == 256, "SysprofCaptureFileHeader changed size");
 SYSPROF_STATIC_ASSERT (sizeof (SysprofCaptureFrame) == 24, "SysprofCaptureFrame changed size");
 SYSPROF_STATIC_ASSERT (sizeof (SysprofCaptureMap) == 56, "SysprofCaptureMap changed size");
 SYSPROF_STATIC_ASSERT (sizeof (SysprofCaptureJitmap) == 28, "SysprofCaptureJitmap changed size");
 SYSPROF_STATIC_ASSERT (sizeof (SysprofCaptureProcess) == 24, "SysprofCaptureProcess changed size");
 SYSPROF_STATIC_ASSERT (sizeof (SysprofCaptureSample) == 32, "SysprofCaptureSample changed size");
+SYSPROF_STATIC_ASSERT (sizeof (SysprofCaptureTrace) == 32, "SysprofCaptureTrace changed size");
 SYSPROF_STATIC_ASSERT (sizeof (SysprofCaptureFork) == 28, "SysprofCaptureFork changed size");
 SYSPROF_STATIC_ASSERT (sizeof (SysprofCaptureExit) == 24, "SysprofCaptureExit changed size");
 SYSPROF_STATIC_ASSERT (sizeof (SysprofCaptureTimestamp) == 24, "SysprofCaptureTimestamp changed size");
@@ -370,9 +403,11 @@ SYSPROF_STATIC_ASSERT (sizeof (SysprofCaptureLog) == 64, "SysprofCaptureLog chan
 SYSPROF_STATIC_ASSERT (sizeof (SysprofCaptureFileChunk) == 284, "SysprofCaptureFileChunk changed size");
 SYSPROF_STATIC_ASSERT (sizeof (SysprofCaptureAllocation) == 48, "SysprofCaptureAllocation changed size");
 SYSPROF_STATIC_ASSERT (sizeof (SysprofCaptureOverlay) == 32, "SysprofCaptureOverlay changed size");
+SYSPROF_STATIC_ASSERT (sizeof (SysprofCaptureDBusMessage) == 28, "SysprofCaptureDBusMessage changed size");
 
 SYSPROF_STATIC_ASSERT ((offsetof (SysprofCaptureAllocation, addrs) % SYSPROF_CAPTURE_ALIGN) == 0, "SysprofCaptureAllocation.addrs is not aligned");
 SYSPROF_STATIC_ASSERT ((offsetof (SysprofCaptureSample, addrs) % SYSPROF_CAPTURE_ALIGN) == 0, "SysprofCaptureSample.addrs is not aligned");
+SYSPROF_STATIC_ASSERT ((offsetof (SysprofCaptureTrace, addrs) % SYSPROF_CAPTURE_ALIGN) == 0, "SysprofCaptureTrace.addrs is not aligned");
 
 static inline int
 sysprof_capture_address_compare (SysprofCaptureAddress a,

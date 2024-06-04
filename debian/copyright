@@ -3,17 +3,23 @@ Source: https://download.gnome.org/sources/sysprof/
 Comment:
  This package was debianized by Samuel Mimram <smimram@debian.org> on
  Sat, 29 Oct 2005 14:22:59 +0200.
+Upstream-Name: sysprof
+License: GPL-3.0+
 
 Files: *
 Copyright:
- 2015-2020 Christian Hergert
+ 2015-2023 Christian Hergert
  2020 Endless Mobile, Inc.
  2020 Endless OS Foundation
  2002 Kristian Rietveld
  1999-2004 Red Hat, Inc.
  2017-2019 Salvatore Sanfilippo
  2004-2008 Søren Sandmann
-License: GPL-2.0+ and GPL-3.0+ and BSD-2-Clause-Patent and BSD-3-Clause and public-domain
+ 2020 Collabora Ltd.
+ 2022 Corentin Noël
+ 2002 Naba Kumar
+ 2016-2023 Free Software Foundation, Inc.
+License: GPL-2.0+ and GPL-3.0+ and LGPL-2.0+ and LGPL-3.0+ and BSD-2-Clause-Patent and BSD-3-Clause and public-domain
 
 License: GPL-2.0+
    This package is free software; you can redistribute it and/or modify
@@ -49,6 +55,34 @@ License: GPL-3.0+
 Comment:
  On Debian systems, the complete text of the GNU General
  Public License can be found in `/usr/share/common-licenses/GPL-3'.
+
+License: LGPL-2.0+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Library General Public
+  License as published by the Free Software Foundation; either
+  version 2 of the License, or (at your option) any later version.
+  .
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Library General Public License for more details.
+Comment:
+ On Debian systems, the complete text of the GNU Library General Public
+ License version 2.0 can be found in /usr/share/common-licenses/LGPL-2.
+
+License: LGPL-3.0+
+  This file is free software; you can redistribute it and/or modify it under
+  the terms of the GNU Lesser General Public License as published by the Free
+  Software Foundation; either version 3 of the License, or (at your option)
+  any later version.
+  .
+  This file is distributed in the hope that it will be useful, but WITHOUT
+  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+  License for more details.
+Comment:
+ On Debian systems, the complete text of the GNU Lesser General
+ Public License can be found in `/usr/share/common-licenses/LGPL-3'.
 
 License: BSD-2-Clause-Patent
  Redistribution and use in source and binary forms, with or without

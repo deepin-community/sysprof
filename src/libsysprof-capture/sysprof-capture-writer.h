@@ -109,6 +109,17 @@ bool                  sysprof_capture_writer_add_map                         (Sy
                                                                               uint64_t                           inode,
                                                                               const char                        *filename);
 SYSPROF_AVAILABLE_IN_ALL
+bool                  sysprof_capture_writer_add_map_with_build_id           (SysprofCaptureWriter              *self,
+                                                                              int64_t                            time,
+                                                                              int                                cpu,
+                                                                              int32_t                            pid,
+                                                                              uint64_t                           start,
+                                                                              uint64_t                           end,
+                                                                              uint64_t                           offset,
+                                                                              uint64_t                           inode,
+                                                                              const char                        *filename,
+                                                                              const char                        *build_id);
+SYSPROF_AVAILABLE_IN_ALL
 bool                  sysprof_capture_writer_add_mark                        (SysprofCaptureWriter              *self,
                                                                               int64_t                            time,
                                                                               int                                cpu,
@@ -142,6 +153,15 @@ bool                  sysprof_capture_writer_add_sample                      (Sy
                                                                               int32_t                            tid,
                                                                               const SysprofCaptureAddress       *addrs,
                                                                               unsigned int                       n_addrs);
+SYSPROF_AVAILABLE_IN_ALL
+bool                  sysprof_capture_writer_add_trace                       (SysprofCaptureWriter              *self,
+                                                                              int64_t                            time,
+                                                                              int                                cpu,
+                                                                              int32_t                            pid,
+                                                                              int32_t                            tid,
+                                                                              const SysprofCaptureAddress       *addrs,
+                                                                              unsigned int                       n_addrs,
+                                                                              bool                               entering);
 SYSPROF_AVAILABLE_IN_ALL
 bool                  sysprof_capture_writer_add_fork                        (SysprofCaptureWriter              *self,
                                                                               int64_t                            time,
@@ -210,6 +230,15 @@ bool                  sysprof_capture_writer_add_overlay                     (Sy
                                                                               const char                        *src,
                                                                               const char                        *dst);
 SYSPROF_AVAILABLE_IN_ALL
+bool                  sysprof_capture_writer_add_dbus_message                (SysprofCaptureWriter              *self,
+                                                                              int64_t                            time,
+                                                                              int                                cpu,
+                                                                              int32_t                            pid,
+                                                                              uint16_t                           bus_type,
+                                                                              uint16_t                           flags,
+                                                                              const uint8_t                     *message_data,
+                                                                              size_t                             message_len);
+SYSPROF_AVAILABLE_IN_ALL
 bool                  sysprof_capture_writer_flush                           (SysprofCaptureWriter              *self);
 SYSPROF_AVAILABLE_IN_ALL
 bool                  sysprof_capture_writer_save_as                         (SysprofCaptureWriter              *self,
@@ -235,5 +264,7 @@ SYSPROF_INTERNAL
 bool                  _sysprof_capture_writer_set_time_range                 (SysprofCaptureWriter              *self,
                                                                               int64_t                            start_time,
                                                                               int64_t                            end_time) SYSPROF_INTERNAL;
+SYSPROF_INTERNAL
+int                   _sysprof_capture_writer_dup_fd                         (SysprofCaptureWriter              *self);
 
 SYSPROF_END_DECLS

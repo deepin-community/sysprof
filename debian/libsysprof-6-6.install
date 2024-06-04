@@ -1,0 +1,2 @@
+usr/lib/${DEB_HOST_MULTIARCH}/libsysprof-6.so.6
+usr/lib/${DEB_HOST_MULTIARCH}/libsysprof-6.so.6.*
