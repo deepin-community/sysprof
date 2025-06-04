@@ -22,6 +22,9 @@ override_dh_auto_configure:
 	dh_auto_configure -- \
 		-Dsysprofd=bundled \
 		-Dsystemdunitdir=/usr/lib/systemd/system \
+ifeq ($(DEB_HOST_ARCH), sw64)
+		-Dlibunwind=true \
+endif
 		$(gtk)
 
 override_dh_makeshlibs:

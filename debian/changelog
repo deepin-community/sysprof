@@ -1,3 +1,9 @@
+sysprof (46.0-1deepin1) unstable; urgency=medium
+
+  * feat: add sw64 support.
+
+ -- hudeng <hudeng@deepin.org>  Wed, 04 Jun 2025 17:59:05 +0800
+
 sysprof (46.0-1) unstable; urgency=medium
 
   * New upstream release
